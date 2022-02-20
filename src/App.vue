@@ -1,8 +1,9 @@
 <template>
 <div id="app">
   <div class="column is-half is-offset-one-quarter">
-    <div v-for="(pokemon, index) in pokemonsList" :key="`pokemon-${index}`">
-      <Pokemon :name="pokemon.name" :url="pokemon.url" :indexPokedex="index + 1"/>
+    <input class="input is-rounded" type="text" placeholder="Buscar pokemon" v-model="busca" id="busca-input">
+    <div v-for="(pokemon, index) in pokemonsFilteredList" :key="`pokemon-${index}`">
+      <Pokemon :name="pokemon.name" :url="pokemon.url" :indexPokedex="pokemon.index"/>
     </div>
   </div>
 </div>
@@ -17,16 +18,34 @@ export default {
   data() {
     return {
       pokemonsList: [],
+      busca: '',
     }
   },
   components: {
     Pokemon,
   },
-  created() {
-    axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0.').then(response => {
+  async created() {
+    
+    await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0.').then(response => {
       this.pokemonsList = response.data.results;
     });
-  }
+
+    let varIndex = 0;
+    this.pokemonsList.forEach(pokemon => {
+      varIndex = varIndex + 1;
+      pokemon.index = varIndex;
+    });
+
+  },
+  computed: {
+    pokemonsFilteredList() {
+      if(this.busca === ''){
+        return this.pokemonsList;
+      }
+
+      return this.pokemonsList.filter(p => p.name === this.busca.toLowerCase());
+    },
+  },
 }
 </script>
 
@@ -38,5 +57,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#busca-input {
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 </style>

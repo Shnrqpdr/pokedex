@@ -41,7 +41,7 @@ export default {
     created() {
         axios.get(this.url).then(response => {
             this.conteudoPokemon = {
-                type: response.data.types[0].type.name,
+                type: response.data.types[0].type.name[0].toUpperCase() + response.data.types[0].type.name.slice(1),
                 imageFront: response.data.sprites.front_default,
                 imageBack: response.data.sprites.back_default,
             };
@@ -50,13 +50,11 @@ export default {
     },
     computed: {
         namePokemon(){
-            var newName = this.name[0].toUpperCase() + this.name.slice(1);
-            return newName;
-        }
+            return this.name[0].toUpperCase() + this.name.slice(1);
+        },
     },
     methods: {
         mudarSpriteImg() {
-            console.log('teste', this.isFront);
             if(this.isFront){
                 this.isFront = false;
                 this.currentImg = this.conteudoPokemon.imageBack;
@@ -64,7 +62,7 @@ export default {
                 this.isFront = true;
                 this.currentImg = this.conteudoPokemon.imageFront;
             }
-        }
+        },
     },
 }
 </script>
