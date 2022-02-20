@@ -7,6 +7,16 @@
 import axios from 'axios';
 export default {
   name: 'App',
+  data() {
+    return {
+    pokemonsList: [],
+  }
+  },
+  created() {
+    axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0.').then(response => {
+      this.pokemonsList = response.data.results;
+    });
+  }
 }
 </script>
 
