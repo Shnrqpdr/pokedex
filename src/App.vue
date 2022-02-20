@@ -1,16 +1,24 @@
 <template>
-<div>
+<div id="app">
+  <div v-for="(pokemon, index) in pokemonsList" :key="`pokemon-${index}`">
+    <Pokemon :name="pokemon.name" :url="pokemon.url" :indexPokedex="index + 1"/>
+  </div>
 </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Pokemon from './components/Pokemon-Component';
+
 export default {
   name: 'App',
   data() {
     return {
-    pokemonsList: [],
-  }
+      pokemonsList: [],
+    }
+  },
+  components: {
+    Pokemon,
   },
   created() {
     axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0.').then(response => {
